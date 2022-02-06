@@ -1,7 +1,8 @@
 {
   "tables": [
-    { "id": 1},
-    { "id": 2 },
-    { "id": 3 }
+    { "id": 1, "Status": "Free", "People": 0, "Bill": 0 },
+    { "id": 2, "Status": "Free", "People": 0, "Bill": 0 },
+    { "id": 3, "Status": "Free", "People": 0, "Bill": 0 },
+    { "id": 4, "Status": "Free", "People": 0, "Bill": 0 }
   ]
 }
