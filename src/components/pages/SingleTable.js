@@ -23,6 +23,18 @@ const SingleTable = () => {
   const statusNames = ["Busy", "Cleaning", "Free", "Reserved"]
   const otherStatuses = statusNames.filter(statusName => statusName !== status)
 
+  const updateTableInfo = e => {
+    setStatus(e.target.value);
+    
+    if (e.target.value === "Cleaning" || "Free"){
+      setPeopleAmount(0);
+      console.log('first condition met')
+    } else if (e.target.value === "Busy"){
+      setBill(0);
+      console.log('second condition met')
+    }
+  }
+
   const handleSubmit = e => {
     e.preventDefault();
     dispatch(updateSingleTable({status, peopleAmount, maxPeopleAmount, bill, id }))
@@ -39,7 +51,7 @@ const SingleTable = () => {
             <Form.Label>Status:</Form.Label>
           </div>
           <div className={styles.select}>
-            <Form.Control as="select" onChange={e => setStatus(e.target.value)} >
+            <Form.Control as="select" onChange={e => updateTableInfo(e)} >
               <option value={status}>
                 {status}
               </option>
@@ -63,7 +75,7 @@ const SingleTable = () => {
             <Form.Control
               type="text"
               value={peopleAmount} 
-              onChange={e => setPeopleAmount(e.target.value)}  
+              onChange={e => setPeopleAmount(e.target.value)}
             />
           </div>
           <p className="mx-2 mt-3">/</p>
@@ -76,21 +88,24 @@ const SingleTable = () => {
           </div>
         </div>
         </Form.Group>
-        <Form.Group>
-        <div className="d-flex justify-content-start align-items-center mt-2">
-          <div className={styles.label}>
-            <Form.Label>Bill:</Form.Label>
-          </div>
-          <p className="mx-2 mt-3">$</p>
-          <div className={styles.numberInput}>
-            <Form.Control
-              type="text"
-              value={bill} 
-              onChange={e => setBill(e.target.value)}
-            />
-          </div>
-        </div>
-        </Form.Group>
+          {
+            status === "Busy" &&  
+              <Form.Group>
+              <div className="d-flex justify-content-start align-items-center mt-2">
+                <div className={styles.label}>
+                  <Form.Label>Bill:</Form.Label>
+                </div>
+                <p className="mx-2 mt-3">$</p>
+                <div className={styles.numberInput}>
+                  <Form.Control
+                    type="text"
+                    value={bill} 
+                    onChange={e => setBill(e.target.value)}
+                  />
+                </div>
+              </div>
+            </Form.Group>
+          }
         <Button variant="primary" type="submit" className="mt-4">Update</Button>
       </Form>
     </>
