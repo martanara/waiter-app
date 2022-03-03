@@ -6,6 +6,7 @@ import { useState } from 'react';
 import shortid from 'shortid';
 import { useNavigate} from 'react-router-dom';
 import SpinnerAnimation from '../common/SpinnerAnimation';
+import PropTypes from 'prop-types';
 
 const TableForm = ({ table }) => {
 
@@ -122,5 +123,9 @@ const TableForm = ({ table }) => {
   )
 
 }
+
+TableForm.propTypes = {
+  table: PropTypes.object,
+};
 
 export default TableForm;
