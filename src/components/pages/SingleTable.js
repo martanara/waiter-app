@@ -5,7 +5,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import { getTableId, updateSingleTable } from '../../redux/tablesRedux';
 import { useState } from 'react';
 import shortid from 'shortid';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Navigate } from 'react-router-dom';
+import SpinnerAnimation from '../common/SpinnerAnimation';
 
 const SingleTable = () => {
 
@@ -14,6 +15,8 @@ const SingleTable = () => {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const [isLoading, setIsLoading] = useState(false)
   
   const [status, setStatus] = useState(table.status)
   const [peopleAmount, setPeopleAmount] = useState(table.peopleAmount)
@@ -23,35 +26,57 @@ const SingleTable = () => {
   const statusNames = ["Busy", "Cleaning", "Free", "Reserved"]
   const otherStatuses = statusNames.filter(statusName => statusName !== status)
 
-  const updateTableInfo = e => {
-    setStatus(e.target.value);
-    
-    if (e.target.value === "Cleaning" || "Free"){
+  const handlePeopleAmount = n => {
+    if (n > maxPeopleAmount) {
+      setPeopleAmount(maxPeopleAmount);
+    } else if (n <= 0){
       setPeopleAmount(0);
-      console.log('first condition met')
-    } else if (e.target.value === "Busy"){
-      setBill(0);
-      console.log('second condition met')
+    } else {
+      setPeopleAmount(n);
     }
   }
 
+  const handleMaxPeopleAmountChange = n => {
+    if (peopleAmount >= n) {
+      setPeopleAmount(n)
+      setMaxPeopleAmount(n)
+    } else if (n >= 10) {
+      setMaxPeopleAmount(10)
+    } else {
+      setMaxPeopleAmount(n)
+    }
+  }
+
+  const handleStatusChange = status => {
+    if (status === 'Busy') {
+      setBill(0);
+      setStatus(status);
+    } else if (status === 'Cleaning' || status === 'Free'){
+      setPeopleAmount(0);
+      setStatus(status);
+    } else {
+      setStatus(status);
+    }
+  };
+
   const handleSubmit = e => {
-    e.preventDefault();
+    setIsLoading(true);
     dispatch(updateSingleTable({status, peopleAmount, maxPeopleAmount, bill, id }))
     navigate("/")
   }
 
+  if (!table) return <Navigate to="/" />
   return (
     <>
       <h1>Table {table.id}</h1>
+      {isLoading && <SpinnerAnimation />}
       <Form onSubmit={handleSubmit}>
-        <Form.Group>
-        <div className="d-flex justify-content-start align-items-center mt-3">
-          <div className={styles.label}>
-            <Form.Label>Status:</Form.Label>
-          </div>
-          <div className={styles.select}>
-            <Form.Control as="select" onChange={e => updateTableInfo(e)} >
+        <Form.Group controlId="status" className="d-flex justify-content-start align-items-center mt-3">
+          <Form.Label className={styles.label}>Status:</Form.Label>
+            <Form.Select  
+              className={styles.select}
+              onChange={e => handleStatusChange(e.target.value)}
+            >
               <option value={status}>
                 {status}
               </option>
@@ -62,49 +87,38 @@ const SingleTable = () => {
                   </option>
                 ))
               }
-            </Form.Control>
-          </div>
-        </div>
+            </Form.Select>
         </Form.Group>
-        <Form.Group>
-        <div className="d-flex justify-content-start align-items-center mt-3">
-          <div className={styles.label}>
-            <Form.Label>People:</Form.Label>
-          </div>
+        <Form.Group controlId="peopleAmount" className="d-flex justify-content-start align-items-center mt-3">
+          <Form.Label className={styles.label}>People:</Form.Label>
           <div className={styles.numberInput}>
             <Form.Control
-              type="text"
+              type="number"
               value={peopleAmount} 
-              onChange={e => setPeopleAmount(e.target.value)}
+              onChange={e => handlePeopleAmount(e.target.value)}
             />
           </div>
           <p className="mx-2 mt-3">/</p>
           <div className={styles.numberInput}>
             <Form.Control
-              type="text"
+              type="number"
               value={maxPeopleAmount} 
-              onChange={e => setMaxPeopleAmount(e.target.value)}
+              onChange={e => handleMaxPeopleAmountChange(e.target.value)}
             />
           </div>
-        </div>
         </Form.Group>
           {
             status === "Busy" &&  
-              <Form.Group>
-              <div className="d-flex justify-content-start align-items-center mt-2">
-                <div className={styles.label}>
-                  <Form.Label>Bill:</Form.Label>
-                </div>
+              <Form.Group controlId="bill" className="d-flex justify-content-start align-items-center mt-2">
+                <Form.Label className={styles.label}>Bill:</Form.Label>
                 <p className="mx-2 mt-3">$</p>
-                <div className={styles.numberInput}>
                   <Form.Control
-                    type="text"
+                    className={styles.numberInput}
+                    type="number"
                     value={bill} 
                     onChange={e => setBill(e.target.value)}
                   />
-                </div>
-              </div>
-            </Form.Group>
+              </Form.Group>
           }
         <Button variant="primary" type="submit" className="mt-4">Update</Button>
       </Form>
