@@ -69,8 +69,8 @@ const TableForm = ({ table }) => {
         <Form.Group controlId="status" className="d-flex justify-content-start align-items-center mt-3">
           <Form.Label className={styles.label}>Status:</Form.Label>
             <Form.Select  
-              className={styles.select}
               onChange={e => handleStatusChange(e.target.value)}
+              className="w-25"
             >
               <option value={status}>
                 {status}
@@ -106,13 +106,14 @@ const TableForm = ({ table }) => {
             status === "Busy" &&  
               <Form.Group controlId="bill" className="d-flex justify-content-start align-items-center mt-2">
                 <Form.Label className={styles.label}>Bill:</Form.Label>
-                <p className="mx-2 mt-3">$</p>
+                <p className="me-2 mt-3">$</p>
+                <div className={styles.numberInput}>
                   <Form.Control
-                    className={styles.numberInput}
                     type="number"
                     value={bill} 
                     onChange={e => setBill(e.target.value)}
                   />
+                </div>
               </Form.Group>
           }
         <Button variant="primary" type="submit" className="mt-4">Update</Button>
