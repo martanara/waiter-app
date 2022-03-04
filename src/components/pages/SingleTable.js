@@ -1,8 +1,8 @@
 import { useParams } from 'react-router';
-import { useSelector} from 'react-redux';
-import { getTableId} from '../../redux/tablesRedux';
+import { useSelector } from 'react-redux';
+import { getTableId } from '../../redux/tablesRedux';
 import { Navigate } from 'react-router-dom';
-import EditTableForm from '../features/TableForm'
+import EditTableForm from '../features/EditTableForm'
 
 const SingleTable = () => {
 

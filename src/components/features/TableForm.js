@@ -8,18 +8,14 @@ import PropTypes from 'prop-types';
 
 const TableForm = ({ table, action, actionText }) => {
 
-  console.log('table', table)
-  console.log('action', action)
-  console.log('actionText', actionText)
-
   const navigate = useNavigate();
 
   const [isLoading, setIsLoading] = useState(false)
   
-  const [status, setStatus] = useState(table.status)
-  const [peopleAmount, setPeopleAmount] = useState(table.peopleAmount)
-  const [maxPeopleAmount, setMaxPeopleAmount] = useState(table.maxPeopleAmount)
-  const [bill, setBill] = useState(table.bill)
+  const [status, setStatus] = useState(table.status);
+  const [peopleAmount, setPeopleAmount] = useState(table.peopleAmount);
+  const [maxPeopleAmount, setMaxPeopleAmount] = useState(table.maxPeopleAmount);
+  const [bill, setBill] = useState(table.bill);
 
   const allStatuses = ["Busy", "Cleaning", "Free", "Reserved"]
   const unselectedStatuses = allStatuses.filter(statusName => statusName !== status)
@@ -59,7 +55,7 @@ const TableForm = ({ table, action, actionText }) => {
 
   const handleSubmit = e => {
     setIsLoading(true);
-    action({status, peopleAmount, maxPeopleAmount, bill, id: parseInt(table.id)});
+    action({status, peopleAmount, maxPeopleAmount, bill, id: table.id});
     navigate("/")
   }
 

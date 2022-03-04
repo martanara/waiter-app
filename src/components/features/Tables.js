@@ -11,6 +11,10 @@ const Tables = () => {
 
   const tables = useSelector(state => getAllTables(state))
 
+  const sortedTables = tables.sort(function(a, b) { 
+    return a.id - b.id
+  });
+
   const remove = tableId => {
     dispatch(removeTableRequest(tableId))
   }
@@ -25,7 +29,7 @@ const Tables = () => {
       </div>
       {tables.length === 0 && <SpinnerAnimation />}
       {
-        tables.map(table => (
+        sortedTables.map(table => (
           <div key={table.id} className="d-flex border-bottom align-items-center">
             <h3 className="m-0">Table {table.id}</h3>
             <p className="ps-4 m-0"><span className="fw-bold">Status: </span>{table.status}</p>

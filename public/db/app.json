@@ -22,15 +22,22 @@
       "bill": "100"
     },
     {
-      "id": 5,
-      "status": "Reserved",
+      "status": "Free",
       "peopleAmount": 0,
-      "maxPeopleAmount": 3,
-      "bill": "0"
+      "maxPeopleAmount": 5,
+      "bill": 0,
+      "id": 1
     },
     {
       "status": "Free",
-      "peopleAmount": "2",
+      "peopleAmount": 0,
+      "maxPeopleAmount": 5,
+      "bill": 0,
+      "id": 5
+    },
+    {
+      "status": "Free",
+      "peopleAmount": 0,
       "maxPeopleAmount": 5,
       "bill": 0,
       "id": 6
