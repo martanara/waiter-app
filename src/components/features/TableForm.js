@@ -1,16 +1,17 @@
 import styles from './TableForm.module.scss';
 import { Form, Button } from 'react-bootstrap';
-import { useDispatch } from 'react-redux';
-import { updateSingleTable } from '../../redux/tablesRedux';
 import { useState } from 'react';
 import shortid from 'shortid';
 import { useNavigate} from 'react-router-dom';
 import SpinnerAnimation from '../common/SpinnerAnimation';
 import PropTypes from 'prop-types';
 
-const TableForm = ({ table }) => {
+const TableForm = ({ table, action, actionText }) => {
 
-  const dispatch = useDispatch();
+  console.log('table', table)
+  console.log('action', action)
+  console.log('actionText', actionText)
+
   const navigate = useNavigate();
 
   const [isLoading, setIsLoading] = useState(false)
@@ -20,8 +21,8 @@ const TableForm = ({ table }) => {
   const [maxPeopleAmount, setMaxPeopleAmount] = useState(table.maxPeopleAmount)
   const [bill, setBill] = useState(table.bill)
 
-  const statusNames = ["Busy", "Cleaning", "Free", "Reserved"]
-  const otherStatuses = statusNames.filter(statusName => statusName !== status)
+  const allStatuses = ["Busy", "Cleaning", "Free", "Reserved"]
+  const unselectedStatuses = allStatuses.filter(statusName => statusName !== status)
 
   const handlePeopleAmount = n => {
     if (n > maxPeopleAmount) {
@@ -58,7 +59,7 @@ const TableForm = ({ table }) => {
 
   const handleSubmit = e => {
     setIsLoading(true);
-    dispatch(updateSingleTable({status, peopleAmount, maxPeopleAmount, bill, id: parseInt(table.id)}))
+    action({status, peopleAmount, maxPeopleAmount, bill, id: parseInt(table.id)});
     navigate("/")
   }
 
@@ -77,7 +78,7 @@ const TableForm = ({ table }) => {
                 {status}
               </option>
               {
-                otherStatuses.map(statusName => (
+                unselectedStatuses.map(statusName => (
                   <option key={shortid()} value={statusName}>
                     {statusName}
                   </option>
@@ -117,15 +118,16 @@ const TableForm = ({ table }) => {
                 </div>
               </Form.Group>
           }
-        <Button variant="primary" type="submit" className="mt-4">Update</Button>
+        <Button variant="primary" type="submit" className="mt-4">{actionText}</Button>
       </Form>
     </>
   )
-
-}
+};
 
 TableForm.propTypes = {
   table: PropTypes.object,
+  action: PropTypes.func,
+  actionText: PropTypes.string,
 };
 
 export default TableForm;
