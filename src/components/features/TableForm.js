@@ -30,16 +30,26 @@ const TableForm = ({ table, action, actionText }) => {
     }
   }
 
-  const handleMaxPeopleAmountChange = n => {
-    if (peopleAmount >= n) {
-      setPeopleAmount(n)
-      setMaxPeopleAmount(n)
-    } else if (n >= 10) {
-      setMaxPeopleAmount(10)
+  const handleMaxPeopleAmount = n => {
+    if (n <= 0){
+      setMaxPeopleAmount(1);
+    } else if (n > 10) {
+      setMaxPeopleAmount(10);
+    } else if (peopleAmount > n) {
+      setMaxPeopleAmount(n);
+      setPeopleAmount(n);
     } else {
-      setMaxPeopleAmount(n)
+      setMaxPeopleAmount(n);
     }
   }
+
+  /*
+
+  useEffect(() => {
+    console.log('peopleAmount', typeof peopleAmount)
+    console.log('maxPeopleAmount', typeof maxPeopleAmount)
+  }, [peopleAmount, maxPeopleAmount])
+  */
 
   const handleStatusChange = status => {
     if (status === 'Busy') {
@@ -88,7 +98,7 @@ const TableForm = ({ table, action, actionText }) => {
             <Form.Control
               type="number"
               value={peopleAmount} 
-              onChange={e => handlePeopleAmount(e.target.value)}
+              onChange={e => handlePeopleAmount(parseInt(e.target.value))}
             />
           </div>
           <p className="mx-2 mt-3">/</p>
@@ -96,7 +106,7 @@ const TableForm = ({ table, action, actionText }) => {
             <Form.Control
               type="number"
               value={maxPeopleAmount} 
-              onChange={e => handleMaxPeopleAmountChange(e.target.value)}
+              onChange={e => handleMaxPeopleAmount(parseInt(e.target.value))}
             />
           </div>
         </Form.Group>
@@ -121,7 +131,13 @@ const TableForm = ({ table, action, actionText }) => {
 };
 
 TableForm.propTypes = {
-  table: PropTypes.object,
+  table: PropTypes.shape({
+    id: PropTypes.number,
+    status: PropTypes.string,
+    peopleAmount: PropTypes.number,
+    maxPeopleAmount: PropTypes.number,
+    bill: PropTypes.number,
+  }),
   action: PropTypes.func,
   actionText: PropTypes.string,
 };

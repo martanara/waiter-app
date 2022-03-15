@@ -31,7 +31,7 @@ const AddTableForm = () => {
     id: generateTableId(),
     status: 'Free',
     peopleAmount: 0,
-    maxPeopleAmount: 5,
+    maxPeopleAmount: 4,
     bill: 0,
   }
   
